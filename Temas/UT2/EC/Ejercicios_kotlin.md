@@ -1,4 +1,4 @@
-# UT2. Ejercicios Kotlin concepto básicos/intermedios
+# UT2. Ejercicios Kotlin nivel básicos/intermedios
 
 ### **📚 Guía de Ejercicios de Kotlin para Desarrolladores Java**
 
