@@ -1,4 +1,52 @@
 # UT2. Ejercicios Kotlin Avanzados
+
+Estos ejercicios son de temas avanzados, por lo que puede ser que te resulten más complejos.
+
+
+## 💎 14. Genéricos
+
+Los genéricos, al igual que en Java, permiten escribir clases y funciones que pueden trabajar con cualquier tipo, proporcionando seguridad de tipos en tiempo de compilación. La sintaxis es muy similar.
+
+```kotlin
+// Función genérica
+fun <T> imprimirElemento(elemento: T) {
+    println(elemento)
+}
+
+// Clase genérica
+class Caja<T>(var contenido: T) {
+    fun obtenerContenido(): T = contenido
+}
+```
+
+🔗 **Documentación Oficial:** [Generics](https://kotlinlang.org/docs/generics.html)
+
+---
+
+- 📦 **Paquete:** `com.pdmd.2526.T01.ejercicios_kotlin.genericos`
+- 📝 **Ficheros:** `ejercicio_1.kt`, `ejercicio_2.kt`, ...
+
+### Ejercicios Propuestos:
+
+1.  **Ejercicio 1: Función Genérica**
+    *   Crea una función genérica `primerElemento` que reciba una `List<T>` y devuelva el primer elemento, o `null` si la lista está vacía.
+
+2.  **Ejercicio 2: Clase Genérica**
+    *   Crea una clase genérica `Par<A, B>` que almacene un par de valores de tipos posiblemente diferentes.
+
+3.  **Ejercicio 3: Restricciones de Tipo (Type Constraints)**
+    *   Crea una función genérica `ordenarLista` que solo acepte listas de elementos que implementen la interfaz `Comparable<T>`. Debe devolver la lista ordenada.
+
+4.  **Ejercicio 4: `out` para Covarianza**
+    *   Crea una interfaz genérica `Fuente<out T>` con un método `proximo(): T`. Explica en un comentario por qué `out` es adecuado aquí (indica que `T` solo se produce, no se consume).
+
+5.  **Ejercicio 5: `in` para Contravarianza**
+    *   Crea una interfaz genérica `Consumidor<in T>` con un método `consumir(item: T)`. Explica por qué `in` es adecuado (indica que `T` solo se consume).
+
+---
+
+
+
 ---
 
 ## 🔒 15. Clases Selladas (Sealed Classes)
