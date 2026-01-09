@@ -11,6 +11,37 @@
 4.  Imprime la lista.
 5.  **Reto:** Alguien se ha equivocado. Elimina todas las canciones que duren más de 300 segundos (5 minutos) usando `removeIf`.
 
+<details>
+<summary><b>Solución Ejercicio 1</b></summary>
+
+```kotlin
+// main.kt
+fun main() {
+    println("=== EJERCICIO 1: Playlist ===")
+    
+    // 1. Data Class (Ya definida en plantilla)
+    // 2. Crear lista mutable
+    val playlist = mutableListOf<Cancion>()
+    
+    // 3. Añadir canciones
+    playlist.add(Cancion("Bohemian Rhapsody", "Queen", 354))
+    playlist.add(Cancion("Imagine", "John Lennon", 183))
+    playlist.add(Cancion("Stairway to Heaven", "Led Zeppelin", 482))
+    
+    // 4. Imprimir
+    println("Playlist inicial: $playlist")
+
+    // 5. Reto: Eliminar canciones largas (> 300s)
+    // Nota: removeIf es Java 8+. En Kotlin puro 'removeAll' con lambda funciona igual y es más común.
+    // playlist.removeIf { it.duracionSegundos > 300 } 
+    playlist.removeAll { it.duracionSegundos > 300 }
+
+    println("Playlist filtrada: $playlist")
+    println("-------------------------------------\n")
+}
+```
+</details>
+
 ---
 
 ## Ejercicio 2: Base de Datos de Empleados (Mapas)
@@ -24,6 +55,40 @@
 4.  Simula una búsqueda: Crea una variable `dniBuscado` que no exista en el mapa.
 5.  Intenta recuperar el empleado y usa el operador Elvis (`?:`) para imprimir "Empleado no encontrado" si devuelve `null`.
 6.  Busca un DNI que sí exista e imprime su nombre.
+
+<details>
+<summary><b>Solución Ejercicio 2</b></summary>
+
+```kotlin
+// main.kt
+fun main() {
+    println("=== EJERCICIO 2: Mapa Empleados ===")
+    
+    // 2. Crear mapa mutable
+    val empleados: MutableMap<String, Empleado> = mutableMapOf()
+    
+    // 3. Insertar empleados
+    empleados["12345678A"] = Empleado("Ana Ruiz", "Gerente")
+    empleados["87654321B"] = Empleado("Carlos Pérez", "Desarrollador")
+    
+    // 4. Simula búsqueda fallida
+    val dniBuscado = "00000000Z"
+    
+    // 5. Intentar recuperar y usar Elvis
+    val empleadoEncontrado = empleados[dniBuscado]
+    println("Buscando $dniBuscado: ${empleadoEncontrado ?: "Empleado no encontrado"}")
+
+    // 6. Buscar uno existente
+    val dniExistente = "12345678A"
+    // Usamos ?.let para ejecutar código solo si no es nulo
+    empleados[dniExistente]?.let {
+        println("Encontrado: ${it.nombre}")
+    }
+    
+    println("-------------------------------------\n")
+}
+```
+</details>
 
 ---
 
@@ -49,6 +114,38 @@
 3.  **Paso B (Mapear):** A partir de la lista original, crea una lista de Strings `nombresClientes` que contenga solo los nombres en mayúsculas.
 4.  **Paso C (Sumar):** Calcula el total de dinero de todas las ventas usando `sumOf`.
 
+<details>
+<summary><b>Solución Ejercicio 3</b></summary>
+
+```kotlin
+// main.kt
+fun main() {
+    println("=== EJERCICIO 3: Análisis Ventas ===")
+    val ventas = listOf(
+        Venta("Lucía", 150.0, true),
+        Venta("Marcos", 40.0, false),
+        Venta("Elena", 200.0, true),
+        Venta("Juan", 10.0, false)
+    )
+
+    // Paso A: Filtrar VIPs con importe > 100
+    val ventasVip = ventas.filter { it.esVIP && it.importe > 100.0 }
+    println("Ventas VIP importantes: $ventasVip")
+
+    // Paso B: Mapear a nombres en mayúsculas
+    // Nota: map transforma la lista de Ventas en lista de Strings
+    val nombresClientes = ventas.map { it.cliente.uppercase() }
+    println("Clientes: $nombresClientes")
+
+    // Paso C: Sumar total
+    val total = ventas.sumOf { it.importe }
+    println("Total ventas: $total")
+    
+    println("-------------------------------------\n")
+}
+```
+</details>
+
 ---
 
 ## Ejercicio 4: Gestor de Tareas (Encapsulamiento)
@@ -62,6 +159,53 @@
     - Crea una función `agregarTarea(t: Tarea)` que la añada a la lista.
     - Crea una función `marcarComoCompletada(id: Int)`. Debe buscar la tarea por ID y poner `completada = true`.
     - Crea una función `obtenerPendientes(): List<Tarea>` que devuelva solo las tareas que NO están completadas (usa `filter`).
+
+<details>
+<summary><b>Solución Ejercicio 4</b></summary>
+
+```kotlin
+// main.kt
+fun main() {
+    println("=== EJERCICIO 4: Gestor Tareas ===")
+    val gestor = GestorDeTareas()
+    
+    // Agregar tareas
+    gestor.agregarTarea(Tarea(1, "Aprender Kotlin"))
+    gestor.agregarTarea(Tarea(2, "Hacer deploy"))
+    
+    println("Pendientes iniciales: ${gestor.obtenerPendientes()}")
+    
+    // Completar una
+    gestor.marcarComoCompletada(1)
+    
+    println("Pendientes tras completar ID 1: ${gestor.obtenerPendientes()}")
+    println("-------------------------------------\n")
+}
+
+class GestorDeTareas {
+    // Lista privada: Nadie desde fuera puede hacer .clear() o .remove()
+    private val listaTareas = mutableListOf<Tarea>()
+
+    fun agregarTarea(t: Tarea) {
+        listaTareas.add(t)
+    }
+
+    fun marcarComoCompletada(id: Int) {
+        // Buscamos la tarea. find devuelve Tarea? (nullable)
+        val tarea = listaTareas.find { it.id == id }
+        
+        // Si existe (no es nulo), actualizamos.
+        // Al ser una data class (referencia), se actualiza dentro de la lista.
+        tarea?.completada = true
+    }
+
+    fun obtenerPendientes(): List<Tarea> {
+        // Retornamos una lista nueva solo con las pendientes
+        return listaTareas.filter { !it.completada }
+    }
+}
+```
+</details>
 
 ---
 
