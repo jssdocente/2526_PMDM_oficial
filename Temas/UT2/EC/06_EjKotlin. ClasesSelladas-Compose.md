@@ -25,6 +25,29 @@ Imaginad que tenéis un botón en vuestra app que inicia una descarga. Este bot�
 
 - **Pista Compose:** En Compose, usaríais `remember { mutableStateOf(DownloadButtonState.Initial) }` para mantener el estado y un `when` dentro de vuestro `@Composable` para cambiar la apariencia del botón.
 
+Función main
+
+```kotlin
+fun main() {
+    println("--- EJERCICIO 1: Botón de Descarga ---")
+    
+    // Simular el flujo
+    var estadoBoton: DownloadButtonState = DownloadButtonState.Initial
+    simulateDownload(estadoBoton)
+
+    estadoBoton = DownloadButtonState.Downloading
+    simulateDownload(estadoBoton)
+
+    estadoBoton = DownloadButtonState.Downloaded("/sdcard/mis_fotos/gato.jpg")
+    simulateDownload(estadoBoton)
+
+    estadoBoton = DownloadButtonState.Error("No hay conexión a internet")
+    simulateDownload(estadoBoton)
+
+    println("--------------------------------------\n")
+}
+```
+
 <details>
 <summary><b>Solución Ejercicio 1</b></summary>
 
@@ -87,6 +110,18 @@ Estáis creando una lista de tareas (To-Do List). Vuestros ítems de tarea puede
 
 - **Pista Compose:** En un `Composable` de ítem de lista (`TaskItem`), podríais tener un `onClick` en un Checkbox que envía `TaskInteraction.ToggleCompleted(task.id)` a un `ViewModel` o a una función de manejo de eventos.
 
+```kotlin
+fun main() {
+    println("--- EJERCICIO 2: Interacciones To-Do List ---")
+    
+    handleTaskInteraction(TaskInteraction.ToggleCompleted(101))
+    handleTaskInteraction(TaskInteraction.EditTask(101, "Comprar leche y pan"))
+    handleTaskInteraction(TaskInteraction.DeleteTask(101))
+
+    println("-------------------------------------------\n")
+}
+```
+
 <details>
 <summary><b>Solución Ejercicio 2</b></summary>
 
@@ -143,6 +178,37 @@ En Compose, a menudo necesitaréis mostrar diálogos de alerta con diferentes me
 3.  En la función `main`, simula la muestra y ocultación de diferentes tipos de diálogos, llamando a `showDialogInConsole()` en cada cambio de estado. Incluye las acciones `onConfirm` y `onDismiss` como lambdas simples que impriman un mensaje.
 
 - **Pista Compose:** En un `Composable` raíz, tendríais un `mutableStateOf` que contiene vuestro `AlertDialogState`. Luego, usaríais un `when` y las funciones `AlertDialog` o `BasicAlertDialog` de Compose para mostrar el diálogo correspondiente.
+
+Función main
+
+```kotlin
+fun main() {
+    println("--- EJERCICIO 3: Diálogos de Alerta ---")
+    
+    // Simular mostrar confirmación
+    var dialogState: AlertDialogState<*> = AlertDialogState.ShowConfirm(
+        title = "¿Eliminar?",
+        message = "Esta acción no se puede deshacer.",
+        onConfirm = { println("    [Acción] Elemento eliminado") },
+        onDismiss = { println("    [Acción] Cancelado") }
+    )
+    showDialogInConsole(dialogState)
+
+    // Simular mostrar información
+    dialogState = AlertDialogState.ShowInfo(
+        title = "Información",
+        message = "Operación completada con éxito.",
+        onDismiss = { println("    [Acción] Cerrado") }
+    )
+    showDialogInConsole(dialogState)
+
+    // Simular ocultar el diálogo
+    dialogState = AlertDialogState.Dismissed
+    showDialogInConsole(dialogState)
+
+    println("-----------------------------------------\n")
+}
+```
 
 <details>
 <summary><b>Solución Ejercicio 3</b></summary>
@@ -238,6 +304,26 @@ Cuando hacéis una llamada a una API, a veces recibís datos y a veces no (por e
     - Un `Error`.
 
 - **Pista Compose:** Esta es una forma estándar de manejar los resultados de `Flows` o `LiveData` de vuestros `ViewModels`. En vuestro `Composable`, un `when` sobre `ApiResult` dictará qué UI mostrar (un `CircularProgressIndicator`, los datos o un mensaje de error).
+
+Función main
+
+```kotlin
+fun main() {
+    println("--- EJERCICIO 4: Resultados de API ---")
+    
+    processApiResult(ApiResult.Loading)
+    
+    val producto = Product("p1", "Laptop Gamer", 1500.0)
+    processApiResult(ApiResult.Success(producto))
+    
+    // Éxito pero sin datos (ej. borrado exitoso)
+    processApiResult(ApiResult.Success(null))
+
+    processApiResult(ApiResult.Error(404, "Producto no encontrado"))
+
+    println("-------------------------------------\n")
+}
+```
 
 <details>
 <summary><b>Solución Ejercicio 4</b></summary>
